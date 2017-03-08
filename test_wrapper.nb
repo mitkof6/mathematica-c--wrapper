@@ -10,28 +10,26 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     12235,        311]
-NotebookOptionsPosition[     11332,        279]
-NotebookOutlinePosition[     11682,        294]
-CellTagsIndexPosition[     11639,        291]
+NotebookDataLength[     13181,        337]
+NotebookOptionsPosition[     12136,        297]
+NotebookOutlinePosition[     12486,        312]
+CellTagsIndexPosition[     12443,        309]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
-Cell[BoxData[
- StyleBox[
-  RowBox[{"Mathematica", " ", "Wrapper", " ", "for", " ", "Armsimulator"}], 
-  "Title"]], "Input",
- CellChangeTimes->{{3.6978891522379313`*^9, 3.697889172558861*^9}}],
+
+Cell[CellGroupData[{
+Cell["Mathematica Wrapper for Armsimulator", "Title",
+ CellChangeTimes->{3.697967578372294*^9}],
 
 Cell[CellGroupData[{
 
-Cell["Test Armsimulator Wrapper", "Chapter",
- CellChangeTimes->{{3.6978892273430595`*^9, 3.6978892420788383`*^9}, {
-  3.6978893874386616`*^9, 3.697889390318205*^9}}],
+Cell["Test Armsimulator Wrapper", "Subchapter",
+ CellChangeTimes->{3.6979675888374653`*^9}],
 
-Cell["\<\
-The armsimulator requires an initialization call through \
+Cell[TextData[{
+ "The armsimulator requires an initialization call through \
 \[OpenCurlyDoubleQuote]setup\[CloseCurlyDoubleQuote] function which accepts a \
 set of arguments (see bellow). The \[OpenCurlyDoubleQuote]step\
 \[CloseCurlyDoubleQuote] function integrates the model from t0 to tf, where \
@@ -43,102 +41,119 @@ in z-direction only and set the rest arbitrary (e.g. step(0.5, 0, 0, 10, 0, \
 \[CloseCurlyDoubleQuote] functions return the current \
 position/velocity/acceleration of the end effector. The \
 \[OpenCurlyDoubleQuote]printResults\[CloseCurlyDoubleQuote] prints the \
-simulation results to the given directory.\
-\>", "Text",
+simulation results to the given directory. This has been tested on ",
+ StyleBox["\[OpenCurlyDoubleQuote]Wolfram Mathematica 11.0.1.0 Microsoft \
+Windows (64-bit)\[CloseCurlyDoubleQuote]",
+  FontWeight->"Bold"],
+ "."
+}], "Text",
  CellChangeTimes->{{3.6978893966001663`*^9, 3.6978893980147257`*^9}, {
   3.6978897657276*^9, 3.697889808733842*^9}, {3.6978901519045815`*^9, 
-  3.697890226941307*^9}, {3.6978903719645166`*^9, 3.6978905975643167`*^9}}],
+  3.697890226941307*^9}, {3.6978903719645166`*^9, 3.6978905975643167`*^9}, {
+  3.69796761258058*^9, 3.6979676127889633`*^9}}]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["Initialize Armsimulator", "Subchapter",
- CellChangeTimes->{3.697890791212553*^9, 3.6978908623331685`*^9}],
+Cell["Initialize Important Variables", "Subchapter",
+ CellChangeTimes->{3.697890791212553*^9, 3.6978908623331685`*^9, 
+  3.6979676184522343`*^9}],
 
 Cell[BoxData[{
  RowBox[{
-  RowBox[{
-  "buildDir", " ", "=", 
-   "\"\<D:\\\\Desktop\\\\mathematicawrapper\\\\build\\\\Debug\>\""}], 
-  " "}], "\[IndentingNewLine]", 
+  RowBox[{"cwd", " ", "=", " ", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{
-   RowBox[{"modelPath", "=", "\"\<ModelPath\>\""}], ";"}], 
+  RowBox[{"buildDir", " ", "=", 
+   RowBox[{"cwd", "<>", "\"\<\\\\build\\\\debug\>\""}]}], ";", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Directory", " ", "containing", " ", "the", " ", "dynamic", " ", 
+    "libraries"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"modelPath", "=", 
+   RowBox[{"cwd", "<>", "\"\<Foo\>\""}]}], ";", 
   RowBox[{"(*", " ", 
    RowBox[{"absolute", " ", "path", " ", 
-    RowBox[{"to", " ", ".", "osim"}], " ", "arm", " ", "model"}], 
-   "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"indexBody", "=", "\"\<hand\>\""}], ";", 
-   RowBox[{"(*", " ", 
-    RowBox[{
-    "body", " ", "name", " ", "of", " ", "the", " ", "end", " ", "effector"}],
-     "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"indexX", " ", "=", " ", "0"}], ";", 
-   RowBox[{"indexY", "=", "0"}], ";", 
-   RowBox[{"indexZ", "=", "0"}], ";"}], " ", 
+    RowBox[{"to", " ", ".", "osim"}], " ", "arm", " ", "model"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"indexBody", "=", "\"\<hand\>\""}], ";", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "body", " ", "name", " ", "of", " ", "the", " ", "end", " ", "effector"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"indexX", " ", "=", " ", "0.05"}], ";", 
+  RowBox[{"indexY", "=", 
+   RowBox[{"-", "0.14"}]}], ";", 
+  RowBox[{"indexZ", "=", "0.011"}], ";", " ", 
   RowBox[{"(*", " ", 
    RowBox[{
    "offset", " ", "of", " ", "the", " ", "index", " ", "body", " ", "from", 
-    " ", "the", " ", "body", " ", "frame"}], "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"useMuscles", "=", "True"}], ";"}], 
+    " ", "the", " ", "body", " ", "frame"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"useMuscles", "=", "False"}], ";", 
   RowBox[{"(*", " ", 
    RowBox[{
    "use", " ", "muscles", " ", "or", " ", "use", " ", "torque", " ", 
-    "actuators"}], "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"useDualChannel", "=", "True"}], ";"}], " ", 
+    "actuators"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"useDualChannel", "=", "True"}], ";", " ", 
   RowBox[{"(*", " ", 
    RowBox[{
    "use", " ", "both", " ", "channel", " ", "accelerations", " ", "to", " ", 
-    "derive", " ", "the", " ", "control"}], "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"initialState", "=", "\"\<\>\""}], ";"}], 
+    "derive", " ", "the", " ", "control"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"initialState", "=", "\"\<\>\""}], ";", 
   RowBox[{"(*", " ", 
    RowBox[{
     RowBox[{"let", " ", "empty", " ", "to", " ", "re"}], "-", 
     RowBox[{
     "compute", " ", "the", " ", "initial", " ", "state", " ", "of", " ", 
-     "the", " ", "model"}]}], "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"useElbowConstraint", "=", "True"}], ";"}], 
+     "the", " ", "model"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"useElbowConstraint", "=", "True"}], ";", 
   RowBox[{"(*", " ", 
    RowBox[{
    "should", " ", "be", " ", "true", " ", "for", " ", "simulation", " ", 
-    "that", " ", "last", " ", "more", " ", "than", " ", "1", "s"}], 
-   "*)"}]}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"useZDirOnly", "=", "True"}], ";", 
-   RowBox[{"(*", " ", 
-    RowBox[{
-    "should", " ", "be", " ", "true", " ", "for", " ", "simulation", " ", 
-     "that", " ", "last", " ", "more", " ", "than", " ", "1", "s"}], "*)"}], 
-   " ", "\[IndentingNewLine]", 
-   RowBox[{"(*", " ", 
-    RowBox[{"where", " ", "to", " ", "store", " ", "the", " ", "results"}], 
-    "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"resultDir", "=", "\"\<ResultDir\>\""}], ";"}], " "}]}], "Input",
+    "that", " ", "last", " ", "more", " ", "than", " ", "1", "s"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"useZDirOnly", "=", "True"}], ";", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "should", " ", "be", " ", "true", " ", "for", " ", "simulation", " ", 
+    "that", " ", "last", " ", "more", " ", "than", " ", "1", "s"}], "*)"}], 
+  " ", "\[IndentingNewLine]", 
+  RowBox[{"resultDir", "=", 
+   RowBox[{"cwd", "<>", "\"\<Foo\>\""}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{"where", " ", "to", " ", "store", " ", "the", " ", "results"}], 
+   "*)"}]}]}], "Input",
  CellChangeTimes->{{3.697884570600562*^9, 3.697884591271859*^9}, {
   3.6978849381358175`*^9, 3.6978850563432426`*^9}, {3.697885137687439*^9, 
   3.6978851545509424`*^9}, {3.6978871552359033`*^9, 3.697887157427051*^9}, {
   3.697888774800804*^9, 3.6978887929282703`*^9}, {3.6978898205423517`*^9, 
-  3.6978901381904244`*^9}, {3.697890437149521*^9, 3.6978904378207483`*^9}}],
+  3.6978901381904244`*^9}, {3.697890437149521*^9, 3.6978904378207483`*^9}, {
+  3.697967408326114*^9, 3.6979674250757523`*^9}, {3.6979675277006607`*^9, 
+  3.69796753475587*^9}}]
+}, Open  ]],
 
-Cell[BoxData[
- StyleBox[
-  RowBox[{"Load", " ", "Armsimulator", " ", "function"}], 
-  "Subchapter"]], "Input",
- CellChangeTimes->{{3.697884927404455*^9, 3.69788492866439*^9}, {
-  3.6978851779340334`*^9, 3.6978851881991916`*^9}, {3.6978908054838095`*^9, 
-  3.697890843228389*^9}}],
+Cell[CellGroupData[{
+
+Cell["Load Armsimulator function", "Subchapter",
+ CellChangeTimes->{3.6979676257660923`*^9}],
 
 Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"AppendTo", "[", 
+    RowBox[{"$LibraryPath", ",", " ", "buildDir"}], "]"}], ";", 
+   RowBox[{"DeleteDuplicates", "[", "$LibraryPath", "]"}], ";"}], 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "In", " ", "case", " ", "of", " ", "multiple", " ", "dynamics", " ", 
+    "libraries", " ", "you", " ", "need", " ", "to", " ", "add", " ", "to", 
+    " ", "LibraryPath"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"LibraryLoad", "[", 
+    RowBox[{"buildDir", "<>", "\"\<\\\\Util\>\""}], "]"}], " ", "*)"}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{"Load", " ", "dependency", " ", "libraries"}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{"setup", " ", "=", " ", 
   RowBox[{"LibraryFunctionLoad", "[", 
    RowBox[{
@@ -207,11 +222,13 @@ Cell[BoxData[{
    3.6978870848202868`*^9}, 3.697887212483404*^9, {3.697888082996018*^9, 
    3.6978881349466224`*^9}, {3.697888729056469*^9, 3.6978887647197337`*^9}, {
    3.6978890991523285`*^9, 3.697889106335726*^9}, {3.6978902691331253`*^9, 
-   3.697890304477462*^9}}],
+   3.697890304477462*^9}, {3.697967444052204*^9, 3.697967504628662*^9}}]
+}, Open  ]],
 
-Cell[TextData[StyleBox["Test Interface", "Subchapter"]], "Input",
- CellChangeTimes->{{3.6978881600085115`*^9, 3.6978881832165422`*^9}},
- FormatType->"TextForm"],
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Test Interface", "Subchapter"]], "Subchapter",
+ CellChangeTimes->{3.6979676341802893`*^9}],
 
 Cell[BoxData[
  RowBox[{"setup", "[", 
@@ -245,12 +262,13 @@ Cell[BoxData[
 
 Cell[BoxData[
  RowBox[{"printResults", "[", "resultDir", "]"}]], "Input",
- CellChangeTimes->{{3.697888811864411*^9, 3.697888817281535*^9}}],
+ CellChangeTimes->{{3.697888811864411*^9, 3.697888817281535*^9}}]
+}, Open  ]],
 
-Cell[TextData[StyleBox["Unload Library", "Subchapter"]], "Input",
- CellChangeTimes->{{3.697886957757283*^9, 3.697886960211888*^9}, {
-  3.6978881908396325`*^9, 3.697888201440711*^9}},
- FormatType->"TextForm"],
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Unload Library", "Subchapter"]], "Subchapter",
+ CellChangeTimes->{3.697967643315363*^9}],
 
 Cell[BoxData[{
  RowBox[{
@@ -293,24 +311,32 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 191, 4, 76, "Input"],
 Cell[CellGroupData[{
-Cell[774, 28, 165, 2, 72, "Chapter"],
-Cell[942, 32, 1137, 17, 68, "Text"],
+Cell[580, 22, 95, 1, 101, "Title"],
 Cell[CellGroupData[{
-Cell[2104, 53, 111, 1, 67, "Subchapter"],
-Cell[2218, 56, 2943, 74, 221, "Input"],
-Cell[5164, 132, 279, 6, 54, "Input"],
-Cell[5446, 140, 3236, 69, 145, "Input"],
-Cell[8685, 211, 160, 2, 54, "Input"],
-Cell[8848, 215, 497, 9, 30, "Input"],
-Cell[9348, 226, 201, 4, 30, "Input"],
-Cell[9552, 232, 180, 3, 30, InheritFromParent],
-Cell[9735, 237, 129, 2, 30, "Input"],
-Cell[9867, 241, 131, 2, 30, "Input"],
-Cell[10001, 245, 139, 2, 30, "Input"],
-Cell[10143, 249, 207, 3, 54, "Input"],
-Cell[10353, 254, 951, 21, 88, "Input"]
+Cell[700, 27, 91, 1, 67, "Subchapter"],
+Cell[794, 30, 1366, 22, 68, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2197, 57, 145, 2, 67, "Subchapter"],
+Cell[2345, 61, 3116, 70, 240, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5498, 136, 92, 1, 67, "Subchapter"],
+Cell[5593, 139, 3966, 85, 185, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9596, 229, 114, 1, 67, "Subchapter"],
+Cell[9713, 232, 497, 9, 30, "Input"],
+Cell[10213, 243, 201, 4, 30, "Input"],
+Cell[10417, 249, 180, 3, 30, "Input"],
+Cell[10600, 254, 129, 2, 30, "Input"],
+Cell[10732, 258, 131, 2, 30, "Input"],
+Cell[10866, 262, 139, 2, 30, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11042, 269, 112, 1, 67, "Subchapter"],
+Cell[11157, 272, 951, 21, 88, "Input"]
 }, Open  ]]
 }, Open  ]]
 }
