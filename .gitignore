@@ -1,0 +1,27 @@
+# src
+src/util/Settings.h
+
+# common
+desktop.ini
+*.log
+
+# directories
+build
+slprj
+matlab/armsimulator/Release Matlab 2015a x64
+
+# build
+*.mexw64
+*.dll
+
+# opensim
+#*.sto
+#*.mot
+
+# simulink
+*.autosave
+*.original
+
+# temporary
+*~
+*.user

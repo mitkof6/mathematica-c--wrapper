@@ -1,0 +1,319 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     12235,        311]
+NotebookOptionsPosition[     11332,        279]
+NotebookOutlinePosition[     11682,        294]
+CellTagsIndexPosition[     11639,        291]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"Mathematica", " ", "Wrapper", " ", "for", " ", "Armsimulator"}], 
+  "Title"]], "Input",
+ CellChangeTimes->{{3.6978891522379313`*^9, 3.697889172558861*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Test Armsimulator Wrapper", "Chapter",
+ CellChangeTimes->{{3.6978892273430595`*^9, 3.6978892420788383`*^9}, {
+  3.6978893874386616`*^9, 3.697889390318205*^9}}],
+
+Cell["\<\
+The armsimulator requires an initialization call through \
+\[OpenCurlyDoubleQuote]setup\[CloseCurlyDoubleQuote] function which accepts a \
+set of arguments (see bellow). The \[OpenCurlyDoubleQuote]step\
+\[CloseCurlyDoubleQuote] function integrates the model from t0 to tf, where \
+t0 is an internal variable and tf is the first argument of the function. The \
+function requires the 3D acceleration vector for channel1 and channel2. In \
+case that the useZDirOnly=True then the user should specify the acceleration \
+in z-direction only and set the rest arbitrary (e.g. step(0.5, 0, 0, 10, 0, \
+0, 1)). The \[OpenCurlyDoubleQuote]get[Position|Velocity|Acceleration]\
+\[CloseCurlyDoubleQuote] functions return the current \
+position/velocity/acceleration of the end effector. The \
+\[OpenCurlyDoubleQuote]printResults\[CloseCurlyDoubleQuote] prints the \
+simulation results to the given directory.\
+\>", "Text",
+ CellChangeTimes->{{3.6978893966001663`*^9, 3.6978893980147257`*^9}, {
+  3.6978897657276*^9, 3.697889808733842*^9}, {3.6978901519045815`*^9, 
+  3.697890226941307*^9}, {3.6978903719645166`*^9, 3.6978905975643167`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Initialize Armsimulator", "Subchapter",
+ CellChangeTimes->{3.697890791212553*^9, 3.6978908623331685`*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+  "buildDir", " ", "=", 
+   "\"\<D:\\\\Desktop\\\\mathematicawrapper\\\\build\\\\Debug\>\""}], 
+  " "}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"modelPath", "=", "\"\<ModelPath\>\""}], ";"}], 
+  RowBox[{"(*", " ", 
+   RowBox[{"absolute", " ", "path", " ", 
+    RowBox[{"to", " ", ".", "osim"}], " ", "arm", " ", "model"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"indexBody", "=", "\"\<hand\>\""}], ";", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "body", " ", "name", " ", "of", " ", "the", " ", "end", " ", "effector"}],
+     "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"indexX", " ", "=", " ", "0"}], ";", 
+   RowBox[{"indexY", "=", "0"}], ";", 
+   RowBox[{"indexZ", "=", "0"}], ";"}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "offset", " ", "of", " ", "the", " ", "index", " ", "body", " ", "from", 
+    " ", "the", " ", "body", " ", "frame"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"useMuscles", "=", "True"}], ";"}], 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "use", " ", "muscles", " ", "or", " ", "use", " ", "torque", " ", 
+    "actuators"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"useDualChannel", "=", "True"}], ";"}], " ", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "use", " ", "both", " ", "channel", " ", "accelerations", " ", "to", " ", 
+    "derive", " ", "the", " ", "control"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"initialState", "=", "\"\<\>\""}], ";"}], 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"let", " ", "empty", " ", "to", " ", "re"}], "-", 
+    RowBox[{
+    "compute", " ", "the", " ", "initial", " ", "state", " ", "of", " ", 
+     "the", " ", "model"}]}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"useElbowConstraint", "=", "True"}], ";"}], 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "should", " ", "be", " ", "true", " ", "for", " ", "simulation", " ", 
+    "that", " ", "last", " ", "more", " ", "than", " ", "1", "s"}], 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"useZDirOnly", "=", "True"}], ";", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "should", " ", "be", " ", "true", " ", "for", " ", "simulation", " ", 
+     "that", " ", "last", " ", "more", " ", "than", " ", "1", "s"}], "*)"}], 
+   " ", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"where", " ", "to", " ", "store", " ", "the", " ", "results"}], 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"resultDir", "=", "\"\<ResultDir\>\""}], ";"}], " "}]}], "Input",
+ CellChangeTimes->{{3.697884570600562*^9, 3.697884591271859*^9}, {
+  3.6978849381358175`*^9, 3.6978850563432426`*^9}, {3.697885137687439*^9, 
+  3.6978851545509424`*^9}, {3.6978871552359033`*^9, 3.697887157427051*^9}, {
+  3.697888774800804*^9, 3.6978887929282703`*^9}, {3.6978898205423517`*^9, 
+  3.6978901381904244`*^9}, {3.697890437149521*^9, 3.6978904378207483`*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"Load", " ", "Armsimulator", " ", "function"}], 
+  "Subchapter"]], "Input",
+ CellChangeTimes->{{3.697884927404455*^9, 3.69788492866439*^9}, {
+  3.6978851779340334`*^9, 3.6978851881991916`*^9}, {3.6978908054838095`*^9, 
+  3.697890843228389*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"setup", " ", "=", " ", 
+  RowBox[{"LibraryFunctionLoad", "[", 
+   RowBox[{
+    RowBox[{
+    "buildDir", " ", "<>", "\"\<\\\\MathematicaArmPlantSimulator\>\""}], ",", 
+    " ", "\"\<setup\>\"", ",", " ", "\[IndentingNewLine]", 
+    RowBox[{"{", 
+     RowBox[{
+     "String", ",", " ", "String", ",", "Real", ",", " ", "Real", ",", " ", 
+      "Real", ",", "\"\<Boolean\>\"", ",", " ", "\"\<Boolean\>\"", ",", 
+      "String", ",", "\"\<Boolean\>\"", ",", " ", "\"\<Boolean\>\""}], "}"}], 
+    ",", " ", "Integer"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"step", " ", "=", " ", 
+  RowBox[{"LibraryFunctionLoad", "[", 
+   RowBox[{
+    RowBox[{
+    "buildDir", " ", "<>", "\"\<\\\\MathematicaArmPlantSimulator\>\""}], ",", 
+    " ", "\"\<step\>\"", ",", " ", 
+    RowBox[{"{", 
+     RowBox[{
+     "Real", ",", "Real", ",", " ", "Real", ",", " ", "Real", ",", " ", 
+      "Real", ",", " ", "Real", ",", " ", "Real"}], "}"}], ",", " ", 
+    "Integer"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"getPosition", " ", "=", " ", 
+  RowBox[{"LibraryFunctionLoad", "[", 
+   RowBox[{
+    RowBox[{
+    "buildDir", " ", "<>", "\"\<\\\\MathematicaArmPlantSimulator\>\""}], ",", 
+    " ", "\"\<getPosition\>\"", ",", " ", 
+    RowBox[{"{", "}"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"Real", ",", " ", "1"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"getVelocity", " ", "=", " ", 
+  RowBox[{"LibraryFunctionLoad", "[", 
+   RowBox[{
+    RowBox[{
+    "buildDir", " ", "<>", "\"\<\\\\MathematicaArmPlantSimulator\>\""}], ",", 
+    " ", "\"\<getVelocity\>\"", ",", " ", 
+    RowBox[{"{", "}"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"Real", ",", " ", "1"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"getAcceleration", "=", " ", 
+  RowBox[{"LibraryFunctionLoad", "[", 
+   RowBox[{
+    RowBox[{
+    "buildDir", " ", "<>", "\"\<\\\\MathematicaArmPlantSimulator\>\""}], ",", 
+    " ", "\"\<getAcceleration\>\"", ",", " ", 
+    RowBox[{"{", "}"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"Real", ",", " ", "1"}], "}"}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"printResults", "=", " ", 
+  RowBox[{"LibraryFunctionLoad", "[", 
+   RowBox[{
+    RowBox[{
+    "buildDir", " ", "<>", "\"\<\\\\MathematicaArmPlantSimulator\>\""}], ",", 
+    " ", "\"\<printResults\>\"", ",", " ", 
+    RowBox[{"{", "String", "}"}], ",", " ", "Integer"}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.697881579350849*^9, 3.6978817147198*^9}, {
+   3.697881751234959*^9, 3.697881768767576*^9}, {3.6978823135507803`*^9, 
+   3.697882346191307*^9}, {3.6978824405547256`*^9, 3.697882445262542*^9}, {
+   3.6978824824783897`*^9, 3.6978825171822357`*^9}, {3.6978830687492313`*^9, 
+   3.697883084876643*^9}, {3.6978837591620493`*^9, 3.6978837602502556`*^9}, {
+   3.697884488536647*^9, 3.697884552585613*^9}, {3.697885207065136*^9, 
+   3.6978852364714727`*^9}, {3.69788632114163*^9, 3.6978863238929987`*^9}, {
+   3.697886969779603*^9, 3.697886989284116*^9}, {3.697887075683879*^9, 
+   3.6978870848202868`*^9}, 3.697887212483404*^9, {3.697888082996018*^9, 
+   3.6978881349466224`*^9}, {3.697888729056469*^9, 3.6978887647197337`*^9}, {
+   3.6978890991523285`*^9, 3.697889106335726*^9}, {3.6978902691331253`*^9, 
+   3.697890304477462*^9}}],
+
+Cell[TextData[StyleBox["Test Interface", "Subchapter"]], "Input",
+ CellChangeTimes->{{3.6978881600085115`*^9, 3.6978881832165422`*^9}},
+ FormatType->"TextForm"],
+
+Cell[BoxData[
+ RowBox[{"setup", "[", 
+  RowBox[{
+  "modelPath", ",", "indexBody", ",", " ", "indexX", ",", "indexY", ",", " ", 
+   "indexZ", ",", " ", "useMuscles", ",", " ", "useDualChannel", ",", " ", 
+   "initialState", ",", " ", "useElbowConstraint", ",", " ", "useZDirOnly"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.6978852397423286`*^9, 3.6978852557351227`*^9}, {
+   3.697885326871521*^9, 3.697885348583637*^9}, {3.6978881403699017`*^9, 
+   3.6978881546091404`*^9}, 3.697890442989792*^9}],
+
+Cell[BoxData[
+ RowBox[{"step", "[", 
+  RowBox[{"0.1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0"}],
+   "]"}]], "Input",
+ CellChangeTimes->{{3.697890350419376*^9, 3.697890353053234*^9}}],
+
+Cell[BoxData[
+ RowBox[{"getPosition", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.6978870958277807`*^9, 3.6978871045962434`*^9}, {
+  3.697890325453169*^9, 3.6978903477729273`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"getVelocity", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.6978882252139845`*^9, 3.6978882315053186`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"getAcceleration", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.6978882172898765`*^9, 3.697888223505875*^9}}],
+
+Cell[BoxData[
+ RowBox[{"printResults", "[", "resultDir", "]"}]], "Input",
+ CellChangeTimes->{{3.697888811864411*^9, 3.697888817281535*^9}}],
+
+Cell[TextData[StyleBox["Unload Library", "Subchapter"]], "Input",
+ CellChangeTimes->{{3.697886957757283*^9, 3.697886960211888*^9}, {
+  3.6978881908396325`*^9, 3.697888201440711*^9}},
+ FormatType->"TextForm"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"LibraryFunctionUnload", "[", "setup", "]"}], ";"}], 
+  " "}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"LibraryFunctionUnload", "[", "step", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"LibraryFunctionUnload", "[", "getPosition", "]"}], ";", " ", 
+   RowBox[{"LibraryFunctionUnload", "[", "getVelocity", "]"}], ";", " ", 
+   RowBox[{"LibraryFunctionUnload", "[", "getAcceleration", "]"}], ";"}], 
+  " "}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"LibraryFunctionUnload", "[", "printResults", "]"}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.6978837400392947`*^9, 3.697883753850692*^9}, 
+   3.6978854378954926`*^9, {3.6978871261010103`*^9, 3.6978871437152987`*^9}, {
+   3.6978882376502285`*^9, 3.697888249778368*^9}, {3.6978888223360496`*^9, 
+   3.697888828127978*^9}, 3.697888878177328*^9, 3.697889658734824*^9, {
+   3.6978902440290055`*^9, 3.6978902633411884`*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1920, 997},
+WindowMargins->{{Automatic, 1912}, {Automatic, -8}},
+FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (September 21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 191, 4, 76, "Input"],
+Cell[CellGroupData[{
+Cell[774, 28, 165, 2, 72, "Chapter"],
+Cell[942, 32, 1137, 17, 68, "Text"],
+Cell[CellGroupData[{
+Cell[2104, 53, 111, 1, 67, "Subchapter"],
+Cell[2218, 56, 2943, 74, 221, "Input"],
+Cell[5164, 132, 279, 6, 54, "Input"],
+Cell[5446, 140, 3236, 69, 145, "Input"],
+Cell[8685, 211, 160, 2, 54, "Input"],
+Cell[8848, 215, 497, 9, 30, "Input"],
+Cell[9348, 226, 201, 4, 30, "Input"],
+Cell[9552, 232, 180, 3, 30, InheritFromParent],
+Cell[9735, 237, 129, 2, 30, "Input"],
+Cell[9867, 241, 131, 2, 30, "Input"],
+Cell[10001, 245, 139, 2, 30, "Input"],
+Cell[10143, 249, 207, 3, 54, "Input"],
+Cell[10353, 254, 951, 21, 88, "Input"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
